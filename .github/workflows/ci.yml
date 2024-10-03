@@ -9,17 +9,19 @@ jobs:
   build:
     name: 'Build and Push'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16, 18, 20]
+    # strategy:
+    #   matrix:
+    #     node-version: [16, 18, 20]
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup node | ${{ matrix.node-version}}
+    # - name: Setup node | ${{ matrix.node-version}}
+    - name: Setup node 
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        # node-version: ${{ matrix.node-version }}
+        node-version: 20
         cache: 'npm'
     - run: npm install
     # - run: npm run test
@@ -35,9 +37,15 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Build and push docker image
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: nicolasmacedoo/pass.in:${{ steps.generate_tag.outputs.sha }}, nicolasmacedoo/pass.in:latest
 
-    - name: Build docker image
-      run: docker build -t nicolasmacedoo/pass.in:${{ steps.generate_tag.outputs.sha }} . 
+    # - name: Build docker image
+    #   run: docker build -t nicolasmacedoo/pass.in:${{ steps.generate_tag.outputs.sha }} . 
 
-    - name: Push docker image
-      run: docker push nicolasmacedoo/pass.in:${{ steps.generate_tag.outputs.sha }}
+    # - name: Push docker image
+    #   run: docker push nicolasmacedoo/pass.in:${{ steps.generate_tag.outputs.sha }}
