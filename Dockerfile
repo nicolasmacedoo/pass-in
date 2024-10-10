@@ -53,6 +53,8 @@ WORKDIR /usr/src/app
 
 RUN npm install -g prisma
 
+ENV DATABASE_URL=postgresql://passin_owner:cbh91CTaGovA@ep-quiet-snow-a5xshgy8.us-east-2.aws.neon.tech/passin?sslmode=require
+
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./package.json
