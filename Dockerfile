@@ -44,6 +44,9 @@ FROM base AS build
 COPY . .
 COPY --from=base /usr/src/app/node_modules ./node_modules
 
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
 RUN npm run build
 RUN npm prune --production
 

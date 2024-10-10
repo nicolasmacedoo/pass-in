@@ -51,11 +51,11 @@ jobs:
       env:
         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         TAG: ${{ steps.generate_tag.outputs.sha }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: | 
         docker build -t $REGISTRY/nicolasmacedo-ci:$TAG . 
-        docker push $REGISTRY/nicolasmacedo-ci:$TAG 
         docker tag $REGISTRY/nicolasmacedo-ci:$TAG $REGISTRY/nicolasmacedo-ci:latest
-        docker push $REGISTRY/nicolasmacedo-ci:latest
+        docker push --all-tags $REGISTRY/nicolasmacedo-ci:latest
         IMAGE=$(echo $REGISTRY/nicolasmacedo-ci:$TAG)
         echo "image=$IMAGE" >> $GITHUB_OUTPUT
     
@@ -65,6 +65,7 @@ jobs:
       with:
         service: pass-in-api
         image: ${{ steps.build-docker-image.outputs.image }}
+        copy-env-vars: true
         access-role-arn: arn:aws:iam::442426890902:role/app-runner-role
         region: us-east-2
         cpu: 1
