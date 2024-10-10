@@ -55,7 +55,7 @@ jobs:
       run: | 
         docker build -t $REGISTRY/nicolasmacedo-ci:$TAG . 
         docker tag $REGISTRY/nicolasmacedo-ci:$TAG $REGISTRY/nicolasmacedo-ci:latest
-        docker push --all-tags $REGISTRY/nicolasmacedo-ci:latest
+        docker push --all-tags $REGISTRY/nicolasmacedo-ci
         IMAGE=$(echo $REGISTRY/nicolasmacedo-ci:$TAG)
         echo "image=$IMAGE" >> $GITHUB_OUTPUT
     
